@@ -55,13 +55,13 @@ resource "aws_elb" "concourse" {
     lb_protocol = "http"
   }
 
-  listener {
-    instance_port = 8080
-    instance_protocol = "http"
-    lb_port = 443
-    lb_protocol = "https"
-    ssl_certificate_id = "${var.ssl_cert_arn}"
-}
+  /*listener {*/
+    /*instance_port = 8080*/
+    /*instance_protocol = "http"*/
+    /*lb_port = 443*/
+    /*lb_protocol = "https"*/
+    /*ssl_certificate_id = "${var.ssl_cert_arn}"*/
+/*}*/
 
   listener {
     instance_port = 2222

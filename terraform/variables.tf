@@ -6,17 +6,17 @@ type = "string"
 }
 variable "aws_region" {
     type = "string"
-    default =  "us-east-1"
+    default =  "eu-west-1"
 }
-variable "source_access_ip" {
-type = "string"
-}
+/*variable "source_access_ip" {*/
+/*type = "string"*/
+/*}*/
 variable "ci_hostname" {
 type = "string"
 }
 variable "ci_dns_zone_id" {
 type = "string"
 }
-variable "ssl_cert_arn" {
-type = "string"
-}
+/*variable "ssl_cert_arn" {*/
+/*type = "string"*/
+/*}*/
