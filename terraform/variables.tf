@@ -17,6 +17,10 @@ type = "string"
 variable "ci_dns_zone_id" {
 type = "string"
 }
+variable "bosh_password" {
+  type = "string"
+  default = "boshpassword"
+}
 /*variable "ssl_cert_arn" {*/
 /*type = "string"*/
 /*}*/

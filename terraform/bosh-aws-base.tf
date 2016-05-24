@@ -42,11 +42,6 @@ resource "aws_subnet" "default" {
   }
 }
 
-# Create an EIP for our Director
-resource "aws_eip" "boshdirector" {
-  vpc = true
-  depends_on = ["aws_internet_gateway.default"]
-}
 
 # The default security group
 resource "aws_security_group" "boshdefault" {

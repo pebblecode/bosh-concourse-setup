@@ -33,6 +33,22 @@ resource "template_file" "bosh_init" {
   template = "${file("${path.module}/bosh_init.sh")}"
 }
 
+resource "template_file" "director" {
+  template = "${file("${path.module}/director.yaml.tpl")}"
+
+  vars {
+    availability_zone                  = "${aws_subnet.default.availability_zone}"
+    subnet_cidr                        = "${aws_subnet.default.cidr_block}"
+    subnet_id                          = "${aws_subnet.default.id}"
+    director_iam_instance_profile_name = "director"
+    bosh_password                      = "${var.bosh_password}"
+    aws_region                         = "${var.aws_region}"
+    provisioned_private_key_path       = "./bosh.pem"
+    security_group                     = "${aws_security_group.boshdefault.id}"
+    key_name                           = "${aws_key_pair.admin.key_name}"
+  }
+}
+
 resource "template_cloudinit_config" "inception_host" {
   gzip          = true
   base64_encode = true
@@ -40,6 +56,11 @@ resource "template_cloudinit_config" "inception_host" {
   part {
     content_type = "text/cloud-config"
     content      = "${template_file.inception_init.rendered}"
+  }
+
+  part {
+    content_type = "text/cloud-config"
+    content      = "${template_file.director.rendered}"
   }
 
   part {
@@ -57,12 +78,14 @@ resource "template_cloudinit_config" "inception_host" {
 
 resource "aws_instance" "inception" {
   ami                         = "ami-4070e433"                              # 14.04 LTS eu-west
-  instance_type               = "t2.nano"
+  instance_type               = "t2.medium"
   key_name                    = "${aws_key_pair.admin.key_name}"
   monitoring                  = "false"
   vpc_security_group_ids      = ["${aws_security_group.inception_host.id}"]
   subnet_id                   = "${aws_subnet.default.id}"
   associate_public_ip_address = true
+  iam_instance_profile        = "${aws_iam_instance_profile.director.name}"
+  private_ip = "10.0.0.5"
 
   tags {
     Name = "Inception Host"
