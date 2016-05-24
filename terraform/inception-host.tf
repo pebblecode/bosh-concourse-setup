@@ -33,8 +33,8 @@ resource "template_file" "bosh_init" {
   template = "${file("${path.module}/bosh_init.sh")}"
 }
 
-resource "template_file" "director" {
-  template = "${file("${path.module}/director.yaml.tpl")}"
+resource "template_file" "bosh_config" {
+  template = "${file("${path.module}/aws-cloud.yml.tpl")}"
 
   vars {
     availability_zone                  = "${aws_subnet.default.availability_zone}"
@@ -46,6 +46,7 @@ resource "template_file" "director" {
     provisioned_private_key_path       = "./bosh.pem"
     security_group                     = "${aws_security_group.boshdefault.id}"
     key_name                           = "${aws_key_pair.admin.key_name}"
+    concourse_elb = "${aws_elb.concourse.name}"
   }
 }
 
@@ -60,7 +61,7 @@ resource "template_cloudinit_config" "inception_host" {
 
   part {
     content_type = "text/cloud-config"
-    content      = "${template_file.director.rendered}"
+    content      = "${template_file.bosh_config.rendered}"
   }
 
   part {
@@ -92,6 +93,38 @@ resource "aws_instance" "inception" {
   }
 
   user_data = "${template_cloudinit_config.inception_host.rendered}"
+
+  provisioner "remote-exec" {
+    inline = [
+      "sudo chown -R ubuntu:ubuntu /home/ubuntu"
+    ]
+    connection {
+      type = "ssh"
+      user = "ubuntu"
+      private_key = "./private_key.pem"
+    }
+  }
+  provisioner "file" {
+    source = "./private_key.pem"
+    destination = "bosh.pem"
+    connection {
+      type = "ssh"
+      user = "ubuntu"
+      private_key = "./private_key.pem"
+    }
+  }
+  provisioner "remote-exec" {
+    inline = [
+      "chmod 0600 bosh.pem",
+      "curl -s https://github.com/concourse/concourse/releases/download/v1.2.0/concourse-1.2.0.tgz -o concourse-1.2.0.tgz",
+      "curl -s https://github.com/concourse/concourse/releases/download/v1.2.0/garden-linux-0.337.0.tgz -o garden-linux-0.337.0.tgz"
+    ]
+    connection {
+      type = "ssh"
+      user = "ubuntu"
+      private_key = "./private_key.pem"
+    }
+  }
 }
 
 resource "aws_key_pair" "admin" {
