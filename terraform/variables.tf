@@ -21,6 +21,12 @@ variable "bosh_password" {
   type = "string"
   default = "boshpassword"
 }
+variable "dnsimple_token" {
+  type = "string"
+}
+variable "dnsimple_email" {
+  type = "string"
+}
 /*variable "ssl_cert_arn" {*/
 /*type = "string"*/
 /*}*/

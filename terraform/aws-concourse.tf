@@ -77,7 +77,7 @@ resource "aws_elb" "concourse" {
 
 # Create a CNAME record
 resource "aws_route53_record" "concourse" {
-   zone_id = "${var.ci_dns_zone_id}"
+   zone_id = "${aws_route53_zone.cirrus_pebble_subdomain.id}"
    name = "${var.ci_hostname}"
    type = "CNAME"
    ttl = "300"
