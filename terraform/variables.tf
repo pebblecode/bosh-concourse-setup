@@ -27,6 +27,6 @@ variable "dnsimple_token" {
 variable "dnsimple_email" {
   type = "string"
 }
-/*variable "ssl_cert_arn" {*/
-/*type = "string"*/
-/*}*/
+variable "ssl_cert_arn" {
+type = "string"
+}

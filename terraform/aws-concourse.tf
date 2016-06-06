@@ -55,13 +55,13 @@ resource "aws_elb" "concourse" {
     lb_protocol = "http"
   }
 
-  /*listener {*/
-    /*instance_port = 8080*/
-    /*instance_protocol = "http"*/
-    /*lb_port = 443*/
-    /*lb_protocol = "https"*/
-    /*ssl_certificate_id = "${var.ssl_cert_arn}"*/
-/*}*/
+  listener {
+    instance_port = 8080
+    instance_protocol = "http"
+    lb_port = 443
+    lb_protocol = "https"
+    ssl_certificate_id = "${var.ssl_cert_arn}"
+}
 
   listener {
     instance_port = 2222
@@ -79,7 +79,10 @@ resource "aws_elb" "concourse" {
 resource "aws_route53_record" "concourse" {
    zone_id = "${aws_route53_zone.cirrus_pebble_subdomain.id}"
    name = "${var.ci_hostname}"
-   type = "CNAME"
-   ttl = "300"
-   records = ["${aws_elb.concourse.dns_name}"]
+   type = "A"
+   alias {
+     name = "${aws_elb.concourse.dns_name}"
+     zone_id = "${aws_elb.concourse.zone_id}"
+     evaluate_target_health = false
+   }
 }
