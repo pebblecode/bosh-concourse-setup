@@ -125,6 +125,26 @@ resource "aws_instance" "inception" {
       private_key = "./private_key.pem"
     }
   }
+  provisioner "file" {
+    source = "../bin/"
+    destination = "/home/ubuntu"
+    connection {
+      type = "ssh"
+      user = "ubuntu"
+      private_key = "./private_key.pem"
+    }
+  }
+  provisioner "remote-exec" {
+    inline = [
+      "sudo chown -R ubuntu:ubuntu /home/ubuntu",
+      "chmod +x /home/ubuntu/*.sh"
+    ]
+    connection {
+      type = "ssh"
+      user = "ubuntu"
+      private_key = "./private_key.pem"
+    }
+  }
 }
 
 resource "aws_key_pair" "admin" {
