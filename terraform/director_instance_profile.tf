@@ -37,7 +37,7 @@ resource "aws_iam_role_policy" "director" {
   },{
     "Effect": "Allow",
     "Action": "iam:PassRole",
-    "Resource": "${aws_iam_role.director.arn}"
+    "Resource": "${aws_iam_role.concourse-worker.arn}"
   }]
 }EOF
 }
