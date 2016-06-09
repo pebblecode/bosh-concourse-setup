@@ -13,7 +13,7 @@ resource "aws_iam_role_policy" "s3_pipeline_artifacts" {
         "s3:ListBuckets"
       ],
       "Effect": "Allow",
-      "Resource": "${aws_s3_bucket.supplier_frontend_version.arn}"
+      "Resource": "${aws_s3_bucket.build_artifacts.arn}"
     }
   ]
 }
