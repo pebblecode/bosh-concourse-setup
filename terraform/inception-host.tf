@@ -113,20 +113,8 @@ resource "aws_instance" "inception" {
       private_key = "./private_key.pem"
     }
   }
-  provisioner "remote-exec" {
-    inline = [
-      "chmod 0600 bosh.pem",
-      "curl -s https://github.com/concourse/concourse/releases/download/v1.2.0/concourse-1.2.0.tgz -o concourse-1.2.0.tgz",
-      "curl -s https://github.com/concourse/concourse/releases/download/v1.2.0/garden-linux-0.337.0.tgz -o garden-linux-0.337.0.tgz"
-    ]
-    connection {
-      type = "ssh"
-      user = "ubuntu"
-      private_key = "./private_key.pem"
-    }
-  }
   provisioner "file" {
-    source = "../bin/"
+    source = "./make_manifest_concourse-cluster.sh"
     destination = "/home/ubuntu"
     connection {
       type = "ssh"

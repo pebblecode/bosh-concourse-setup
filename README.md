@@ -86,9 +86,9 @@ Or, create a concourse manifest for small cluster:
 
 Upload the necessary stemcell & releases, then deploy concourse:
 ```
-bosh upload stemcell https://bosh.io/d/stemcells/bosh-aws-xen-hvm-ubuntu-trusty-go_agent
-bosh upload release https://bosh.io/d/github.com/concourse/concourse
-bosh upload release https://bosh.io/d/github.com/cloudfoundry-incubator/garden-linux-release
+bosh upload stemcell https://bosh.io/d/stemcells/bosh-aws-xen-hvm-ubuntu-trusty-go_agent?v=3232.8
+osh upload release https://bosh.io/d/github.com/concourse/concourse?v=1.3.0
+bosh upload release https://bosh.io/d/github.com/cloudfoundry-incubator/garden-runc-release?v=0.3.0
 bosh deployment concourse.yml
 bosh deploy
 ```
