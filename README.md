@@ -36,32 +36,16 @@ Set your desired AWS region in `terrform/variables.tf`. Ensure terraform is in y
 cd terraform/
 terraform apply
 ```
-Set the following environment variables:
 
-```
-$AWS_ACCESS_KEY_ID
-$AWS_SECRET_ACCESS_KEY
-$AWS_REGION
-$AWS_AZ
-$BOSH_PASSWORD
-$AWS_KEYPAIR_KEY_NAME
-$PRIVATE_KEY_PATH
-```
-
-Then create the `bosh-director.yml` manifest:
-```
-./bin/make_manifest_bosh-init.sh
-```
-
+Download the bosh_init script with `./bosh_init.sh`
 You are ready to deploy the BOSH Director
 ```
-bosh-init deploy bosh-director.yml
+bosh-init deploy director.yml
 ```
 
 Go and make a cup of tea.
 
 Once the director is deployed, target it and apply your cloud-config for AWS.
-Remember to set your chosen AZ and the subnet-id output by terraform in `aws-cloud.yml`.
 
 ```
 bosh target <your EIP address>
@@ -73,13 +57,11 @@ Set the Concourse URL and password in these environment variables:
 ```
 $CONCOURSE_PASSWORD
 $CONCOURSE_URL
+$GITHUB_CLIENT_ID
+$GITHUB_CLIENT_SECRET
 ```
 
-Then create a concourse manifest for a single server deployment:
-```
-./bin/make_manifest_concourse.sh
-```
-Or, create a concourse manifest for small cluster:
+Create a concourse manifest for small cluster:
 ```
 ./bin/make_manifest_concourse-cluster.sh
 ```
